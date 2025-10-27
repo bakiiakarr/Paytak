@@ -1,0 +1,126 @@
+@{
+    ViewData["Title"] = "Anasayfa - Paytak";
+}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        Hoş Geldiniz<br>
+                        <span class="gradient-text">Paytak</span>'a
+                    </h1>
+                    <p class="hero-subtitle">
+                        Akıllı belediyecilik platformuna hoş geldiniz. Burada belediye hizmetleri hakkında bilgi alabilir ve sorularınızı sorabilirsiniz.
+                    </p>
+                    
+                    <!-- Chat Button -->
+                    <div class="chat-button-container">
+                        <div class="input-group chat-input-group">
+                            <input type="text" class="form-control chat-input-field" id="initialMessageInput" placeholder="Belediye hizmetleri hakkında soru sorun..." />
+                            <button class="chat-button" id="startChatBtn">
+                                <i class="fas fa-comments me-2"></i>
+                                Chat'e Başla
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Info Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="section-title">Hızlı Bilgi</h2>
+                <p class="section-subtitle">Paytak hakkında kısa bilgiler</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h4>AI Destekli</h4>
+                    <p>Yapay zeka teknolojileri ile güçlendirilmiş belediye hizmetleri.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h4>7/24 Hizmet</h4>
+                    <p>Kesintisiz vatandaş desteği ve belediye hizmetleri.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4>Güvenli</h4>
+                    <p>En yüksek güvenlik standartları ile korunan veriler.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Navigation Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2>Keşfedin</h2>
+                <p>Paytak'ın sunduğu hizmetleri keşfedin ve belediye hizmetleri hakkında daha fazla bilgi alın.</p>
+                <div class="cta-buttons">
+                    <a href="/Home/Services" class="btn btn-primary btn-lg me-3">
+                        <i class="fas fa-cogs me-2"></i>Hizmetlerimiz
+                    </a>
+                    <a href="/Home/About" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-info-circle me-2"></i>Hakkımızda
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startChatBtn = document.getElementById('startChatBtn');
+            const initialMessageInput = document.getElementById('initialMessageInput');
+            
+            // Start chat
+            startChatBtn.addEventListener('click', function() {
+                const initialMessage = initialMessageInput.value.trim();
+                
+                if (initialMessage) {
+                    // Redirect to chat page with message
+                    window.location.href = '/Chat/Index?message=' + encodeURIComponent(initialMessage);
+                } else {
+                    // Redirect to chat page without message
+                    window.location.href = '/Chat/Index';
+                }
+            });
+            
+            // Initial message input event listener
+            initialMessageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    startChatBtn.click();
+                }
+            });
+        });
+    </script>
+} 

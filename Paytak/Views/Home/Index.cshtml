@@ -1,0 +1,435 @@
+﻿@{
+    ViewData["Title"] = "Paytak - Akıllı Belediyecilik";
+}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        Geleceğin Belediyesi<br>
+                        <span class="gradient-text">Bugün Başlıyor</span>
+                    </h1>
+                    <h2 class="hero-subtitle-small">
+                        Akıllı Belediyecilik Çözümleri
+                    </h2>
+                    <p class="hero-subtitle">
+                        Yapay zeka destekli belediye hizmetleri ile vatandaş deneyimini dönüştürüyoruz. Şikayet yönetiminden çöp toplama optimizasyonuna, veri analizinden akıllı raporlamaya kadar tüm belediye süreçlerini dijitalleştiriyor ve verimliliği artırıyoruz. Modern teknolojiler ile belediyelerin daha şeffaf, hızlı ve vatandaş odaklı hizmet vermesini sağlıyoruz.
+                    </p>
+                    
+                    <!-- Chat Button -->
+                    <div class="chat-button-container">
+                        <div class="input-group chat-input-group">
+                            <input type="text" class="form-control chat-input-field" id="initialMessageInput" placeholder="Belediye hizmetleri hakkında soru sorun..." />
+                            <button class="chat-button" id="startChatBtn">
+                                <i class="fas fa-comments me-2"></i>
+                                Chat'e Başla
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Chat Interface (Hidden by default) -->
+<section class="chat-interface" id="chatInterface" style="display: none;">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-0">
+                                    <i class="fas fa-robot me-2"></i>Paitak
+                                </h5>
+                                <small>Akıllı belediye asistanı</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <div class="loading-spinner" id="aiStatus"></div>
+                                </div>
+                                <small class="text-light">Hazır</small>
+                                <button class="btn-close ms-3" id="closeChatBtn">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Welcome message will be added here -->
+                    </div>
+                    
+                    <div class="chat-input">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="messageInput" placeholder="Belediye hizmetleri hakkında soru sorun..." />
+                            <button class="btn btn-primary" type="button" id="sendButton">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="section-title">Referanslarımız</h2>
+                <p class="section-subtitle">Başarılarımız ve hedeflerimiz</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-4 col-sm-6">
+                <div class="stats-card">
+                    <div class="stats-number">25+</div>
+                    <div class="stats-label">Belediye</div>
+                    <div class="stats-description">Çalıştığımız belediye sayısı</div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-4 col-sm-6">
+                <div class="stats-card">
+                    <div class="stats-number">94%</div>
+                    <div class="stats-label">Başarı Oranı</div>
+                    <div class="stats-description">Vatandaş memnuniyet oranı</div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-4 col-sm-6">
+                <div class="stats-card">
+                    <div class="stats-number">120+</div>
+                    <div class="stats-label">Saat/Temizlik</div>
+                    <div class="stats-description">Aylık kazanılan optimizasyon süresi</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="section-title">Özellikler</h2>
+                <p class="section-subtitle">Akıllı belediyecilik çözümlerimiz</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h4>AI Destekli Şikayet Yönetimi</h4>
+                    <p>Vatandaş şikayetlerini anında analiz eder ve otomatik yanıtlar üretir.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-recycle"></i>
+                    </div>
+                    <h4>Çöp Toplama Optimizasyonu</h4>
+                    <p>Rota optimizasyonu ile yakıt tasarrufu sağlar.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4>Veri Tabanlı Karar Destek</h4>
+                    <p>Gerçek zamanlı veri analizi ile stratejik kararlar alın.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h4>Akıllı Raporlama Sistemi</h4>
+                    <p>Otomatik rapor oluşturma ve performans analizi ile belediye faaliyetlerini takip edin.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2>Hemen Başlayın</h2>
+                <p>Akıllı belediyecilik deneyimini yaşamak için hemen ücretsiz hesap oluşturun.</p>
+                <div class="cta-buttons">
+                    <a href="/Account/Register" class="btn btn-primary btn-lg me-3">
+                        <i class="fas fa-user-plus me-2"></i>Ücretsiz Kayıt Ol
+                    </a>
+                    <a href="/Account/Login" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Giriş Yap
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startChatBtn = document.getElementById('startChatBtn');
+            const chatInterface = document.getElementById('chatInterface');
+            const closeChatBtn = document.getElementById('closeChatBtn');
+            const messageInput = document.getElementById('messageInput');
+            const sendButton = document.getElementById('sendButton');
+            const chatMessages = document.getElementById('chatMessages');
+            const initialMessageInput = document.getElementById('initialMessageInput');
+            
+            // Start chat
+            startChatBtn.addEventListener('click', function() {
+                const initialMessage = initialMessageInput.value.trim();
+                
+                chatInterface.style.display = 'block';
+                chatInterface.scrollIntoView({ behavior: 'smooth' });
+                
+                // Add welcome message
+                setTimeout(() => {
+                    addMessage('Merhaba! Ben Paitak, akıllı belediye asistanınız. Size nasıl yardımcı olabilirim?', 'ai');
+                    
+                    // If user entered an initial message, send it
+                    if (initialMessage) {
+                        setTimeout(() => {
+                            addMessage(initialMessage, 'user');
+                            initialMessageInput.value = '';
+                            
+                            // Send initial message to API
+                            const loadingId = addLoadingMessage();
+                            updateAIStatus(true);
+                            
+                            fetch('/api/chat/send', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    message: initialMessage,
+                                    model: 'gpt-4o-mini',
+                                    maxTokens: 1000,
+                                    temperature: 0.7
+                                })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                removeLoadingMessage(loadingId);
+                                updateAIStatus(false);
+                                
+                                if (data.success) {
+                                    addMessage(data.response, 'ai');
+                                } else {
+                                    addMessage('Hata: ' + (data.errorMessage || 'Bilinmeyen hata'), 'error');
+                                }
+                            })
+                            .catch(error => {
+                                removeLoadingMessage(loadingId);
+                                updateAIStatus(false);
+                                addMessage('Bağlantı hatası: ' + error.message, 'error');
+                            });
+                        }, 500);
+                    }
+                }, 500);
+            });
+            
+            // Close chat
+            closeChatBtn.addEventListener('click', function() {
+                chatInterface.style.display = 'none';
+                chatMessages.innerHTML = '';
+            });
+            
+            function addMessage(message, type) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message-bubble ${type === 'user' ? 'user-message' : type === 'ai' ? 'ai-message' : 'error-message'}`;
+                
+                if (type === 'user') {
+                    messageDiv.innerHTML = `
+                        <div class="d-flex align-items-start">
+                            <div class="ms-auto">
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="me-2">👤</span>
+                                    <small class="text-light">Siz</small>
+                                </div>
+                                <div class="message-content">${message}</div>
+                                <small class="text-light">${new Date().toLocaleTimeString()}</small>
+                            </div>
+                        </div>
+                    `;
+                } else if (type === 'ai') {
+                    messageDiv.innerHTML = `
+                        <div class="d-flex align-items-start">
+                            <div class="me-3">
+                                <i class="fas fa-robot text-success" style="font-size: 1.2rem;"></i>
+                            </div>
+                            <div>
+                                <strong>Paitak</strong>
+                                <div class="mt-1">${message}</div>
+                                <small class="text-light">${new Date().toLocaleTimeString()}</small>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    messageDiv.innerHTML = `
+                        <div class="d-flex align-items-start">
+                            <div class="me-3">
+                                <i class="fas fa-exclamation-triangle text-warning" style="font-size: 1.2rem;"></i>
+                            </div>
+                            <div>
+                                <strong>Hata</strong>
+                                <div class="mt-1">${message}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                chatMessages.appendChild(messageDiv);
+                forceScrollToBottom();
+            }
+            
+            function handleSendMessage() {
+                const message = messageInput.value.trim();
+                if (!message) return;
+                
+                // Add user message
+                addMessage(message, 'user');
+                messageInput.value = '';
+                
+                // Show loading indicator
+                const loadingId = addLoadingMessage();
+                updateAIStatus(true);
+                
+                // Send to API
+                fetch('/api/chat/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        model: 'gpt-4o-mini',
+                        maxTokens: 1000,
+                        temperature: 0.7
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Remove loading message
+                    removeLoadingMessage(loadingId);
+                    updateAIStatus(false);
+                    
+                    if (data.success) {
+                        // Add AI response to chat
+                        addMessage(data.response, 'ai');
+                    } else {
+                        // Show error message
+                        addMessage('Hata: ' + (data.errorMessage || 'Bilinmeyen hata'), 'error');
+                    }
+                })
+                .catch(error => {
+                    // Remove loading message
+                    removeLoadingMessage(loadingId);
+                    updateAIStatus(false);
+                    
+                    // Show error message
+                    addMessage('Bağlantı hatası: ' + error.message, 'error');
+                });
+            }
+            
+            // Event listeners
+            sendButton.addEventListener('click', handleSendMessage);
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleSendMessage();
+                }
+            });
+            
+            // Initial message input event listener
+            initialMessageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    startChatBtn.click();
+                }
+            });
+            
+            // Loading and error message functions
+            function addLoadingMessage() {
+                const loadingDiv = document.createElement('div');
+                loadingDiv.className = 'message-bubble ai-message';
+                loadingDiv.id = 'loading-message';
+                
+                loadingDiv.innerHTML = `
+                    <div class="d-flex align-items-start">
+                        <div class="me-3">
+                            <i class="fas fa-robot text-success" style="font-size: 1.2rem;"></i>
+                        </div>
+                        <div>
+                            <strong>Paitak</strong>
+                            <div class="mt-1 d-flex align-items-center">
+                                <div class="loading-spinner me-3"></div>
+                                Düşünüyor...
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                chatMessages.appendChild(loadingDiv);
+                forceScrollToBottom();
+                return 'loading-message';
+            }
+            
+            function removeLoadingMessage(loadingId) {
+                const loadingElement = document.getElementById(loadingId);
+                if (loadingElement) {
+                    loadingElement.remove();
+                }
+            }
+            
+            function updateAIStatus(isThinking) {
+                const aiStatus = document.getElementById('aiStatus');
+                if (aiStatus) {
+                    const statusText = aiStatus.parentElement.querySelector('small');
+                    if (statusText) {
+                        if (isThinking) {
+                            aiStatus.style.display = 'block';
+                            statusText.textContent = 'AI Düşünüyor...';
+                        } else {
+                            aiStatus.style.display = 'none';
+                            statusText.textContent = 'Hazır';
+                        }
+                    }
+                }
+            }
+            
+            function forceScrollToBottom() {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                chatMessages.scrollTo({
+                    top: chatMessages.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    </script>
+}

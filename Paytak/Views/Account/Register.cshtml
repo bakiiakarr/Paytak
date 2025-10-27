@@ -1,0 +1,155 @@
+@model Paytak.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Üye Ol";
+}
+
+<div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col-md-6 col-lg-4">
+            <div class="register-card">
+                <div class="text-center mb-4">
+                    <h2 class="register-title">
+                        <i class="fas fa-robot me-2"></i>Paytak
+                    </h2>
+                    <p class="register-subtitle">Ücretsiz hesap oluşturun</p>
+                </div>
+
+                <form asp-action="Register" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="FirstName" class="form-label">Ad</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <input asp-for="FirstName" class="form-control form-control-modern" placeholder="Adınız" />
+                        </div>
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="LastName" class="form-label">Soyad</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <input asp-for="LastName" class="form-control form-control-modern" placeholder="Soyadınız" />
+                        </div>
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">E-posta</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <input asp-for="Email" class="form-control form-control-modern" placeholder="ornek@email.com" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">Şifre</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                            <input asp-for="Password" type="password" class="form-control form-control-modern" placeholder="Güçlü bir şifre oluşturun" />
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label">Şifre Tekrar</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                            <input asp-for="ConfirmPassword" type="password" class="form-control form-control-modern" placeholder="Şifrenizi tekrar girin" />
+                        </div>
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="terms" required />
+                        <label class="form-check-label" for="terms">
+                            <a href="#" class="text-primary">Kullanım şartlarını</a> kabul ediyorum
+                        </label>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-modern btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Ücretsiz Kayıt Ol
+                        </button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="mb-0">
+                        Zaten hesabınız var mı? 
+                        <a asp-action="Login" class="text-primary">Giriş yapın</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.register-card {
+    background: white;
+    padding: 3rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.register-title {
+    color: #2c3e50;
+    font-weight: 700;
+    font-size: 2rem;
+}
+
+.register-subtitle {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+}
+
+.input-group-text {
+    background: #f8f9fa;
+    border: 2px solid #ecf0f1;
+    border-right: none;
+    color: #7f8c8d;
+}
+
+.form-control-modern {
+    border-left: none;
+}
+
+.form-control-modern:focus {
+    border-left: none;
+    box-shadow: none;
+}
+
+.input-group:focus-within .input-group-text {
+    border-color: #3498db;
+}
+
+.btn-modern {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

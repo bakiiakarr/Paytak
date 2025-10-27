@@ -1,0 +1,120 @@
+@model Paytak.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col-md-6 col-lg-4">
+            <div class="login-card">
+                <div class="text-center mb-4">
+                    <h2 class="login-title">
+                        <i class="fas fa-robot me-2"></i>Paytak
+                    </h2>
+                    <p class="login-subtitle">Hesabınıza giriş yapın</p>
+                </div>
+
+                <form asp-action="Login" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">E-posta</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <input asp-for="Email" class="form-control form-control-modern" placeholder="ornek@email.com" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">Şifre</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                            <input asp-for="Password" type="password" class="form-control form-control-modern" placeholder="Şifrenizi girin" />
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input asp-for="RememberMe" type="checkbox" class="form-check-input" />
+                        <label asp-for="RememberMe" class="form-check-label">Beni hatırla</label>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-modern btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Giriş Yap
+                        </button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="mb-0">
+                        Hesabınız yok mu? 
+                        <a asp-action="Register" class="text-primary">Ücretsiz kayıt olun</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.login-card {
+    background: white;
+    padding: 3rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.login-title {
+    color: #2c3e50;
+    font-weight: 700;
+    font-size: 2rem;
+}
+
+.login-subtitle {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+}
+
+.input-group-text {
+    background: #f8f9fa;
+    border: 2px solid #ecf0f1;
+    border-right: none;
+    color: #7f8c8d;
+}
+
+.form-control-modern {
+    border-left: none;
+}
+
+.form-control-modern:focus {
+    border-left: none;
+    box-shadow: none;
+}
+
+.input-group:focus-within .input-group-text {
+    border-color: #3498db;
+}
+
+.btn-modern {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

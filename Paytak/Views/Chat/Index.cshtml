@@ -1,0 +1,61 @@
+@{
+    ViewData["Title"] = "Paitak Chat";
+}
+
+<div class="app-container">
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="mb-0">
+                        <i class="fas fa-robot me-2"></i>Paitak Chat
+                    </h4>
+                    <small>Kurumsal yapay zeka destekli sohbet asistanı</small>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <div class="loading-spinner" id="aiStatus"></div>
+                    </div>
+                    <small class="text-light">AI Hazır</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <!-- Karşılama mesajı -->
+            <div class="message-bubble ai-message">
+                <div class="d-flex align-items-start">
+                    <div class="me-3">
+                        <i class="fas fa-robot text-success" style="font-size: 1.2rem;"></i>
+                    </div>
+                    <div>
+                        <strong>Paitak</strong>
+                        <div class="mt-1">
+                            Merhaba! Ben Paitak, kurumsal yapay zeka asistanınız. Size nasıl yardımcı olabilirim? 
+                            <br><br>
+                            <small class="text-light">
+                                💡 <strong>Öneriler:</strong><br>
+                                • Belediye hizmetleri hakkında bilgi alabilirim<br>
+                                • Raporlama konularında yardım edebilirim<br>
+                                • Genel sorularınızı yanıtlayabilirim
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-input">
+            <div class="input-group">
+                <input type="text" class="form-control form-control-modern" id="messageInput" placeholder="Mesajınızı yazın..." />
+                <button class="btn btn-modern btn-primary-modern" type="button" id="sendButton">
+                    <i class="fas fa-paper-plane me-2"></i>Gönder
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/chat.js"></script>
+} 
