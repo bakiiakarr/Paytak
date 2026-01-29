@@ -4,17 +4,37 @@ using Paytak.Data;
 using Paytak.Models;
 using Paytak.Services;
 
-// Load .env file
-DotNetEnv.Env.Load();
+// .env dosyasını yükle (proje klasörü veya çalışma dizini)
+var envPaths = new[]
+{
+    Path.Combine(AppContext.BaseDirectory, ".env"),
+    Path.Combine(Directory.GetCurrentDirectory(), ".env"),
+    Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".env"), // bin/Debug/net9.0 -> proje klasörü (Paytak)
+};
+foreach (var envPath in envPaths)
+{
+    var fullPath = Path.GetFullPath(envPath);
+    if (File.Exists(fullPath))
+    {
+        DotNetEnv.Env.Load(fullPath);
+        break;
+    }
+}
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CONNECTION_STRING")))
+    DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+if (string.IsNullOrEmpty(connectionString))
+    throw new InvalidOperationException("CONNECTION_STRING bulunamadı. .env dosyasının Paytak klasöründe olduğundan ve CONNECTION_STRING tanımlı olduğundan emin olun.");
+
 // Add Entity Framework
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(Environment.GetEnvironmentVariable("CONNECTION_STRING")));
+    options.UseSqlServer(connectionString));
 
 // Add Identity
 builder.Services.AddIdentity<User, IdentityRole>(options =>
