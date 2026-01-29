@@ -24,17 +24,18 @@ namespace Paytak.Controllers
             {
                 _logger.LogInformation("Chat message received: {Message}", request.Message);
 
-                // Azure OpenAI API configuration
-                var apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_KEY");
+                // Azure OpenAI API configuration (.env: AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_DEPLOYMENT)
+                var apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY");
                 var endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT");
                 var deployment = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT");
+                var apiVersion = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_VERSION") ?? "2024-02-15-preview";
                 
                 _logger.LogInformation("Azure OpenAI Config - Key: {KeyLength}, Endpoint: {Endpoint}, Deployment: {Deployment}", 
                     apiKey?.Length ?? 0, endpoint, deployment);
                 
                 if (string.IsNullOrEmpty(apiKey) || string.IsNullOrEmpty(endpoint) || string.IsNullOrEmpty(deployment))
                 {
-                    _logger.LogWarning("Azure OpenAI configuration not found in environment variables");
+                    _logger.LogWarning("Azure OpenAI configuration not found. .env dosyasında AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_DEPLOYMENT tanımlı olmalı.");
                     return Ok(new ChatResponseDto
                     {
                         Success = true,
@@ -79,8 +80,8 @@ namespace Paytak.Controllers
                             content = request.Message
                         }
                     },
-                    max_tokens = request.MaxTokens ?? 1000,
-                    temperature = request.Temperature ?? 0.7
+                    max_completion_tokens = request.MaxTokens ?? 1000,
+                    temperature = 1  // Bu model sadece varsayılan (1) değeri destekliyor
                 };
 
                 // Send request to Azure OpenAI
@@ -90,7 +91,7 @@ namespace Paytak.Controllers
                 _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.Add("api-key", apiKey);
 
-                var requestUrl = $"{endpoint}/openai/deployments/{deployment}/chat/completions?api-version=2024-02-15-preview";
+                var requestUrl = $"{endpoint.TrimEnd('/')}/openai/deployments/{deployment}/chat/completions?api-version={apiVersion}";
                 var response = await _httpClient.PostAsync(requestUrl, content);
 
                 if (response.IsSuccessStatusCode)

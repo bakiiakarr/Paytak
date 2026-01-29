@@ -20,16 +20,18 @@ namespace Paytak.Services
         {
             try
             {
-                var apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_KEY");
+                // .env'deki değişken adları: AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_DEPLOYMENT, AZURE_OPENAI_API_VERSION
+                var apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY");
                 var endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT");
                 var deployment = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT");
+                var apiVersion = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_VERSION") ?? "2024-02-15-preview";
 
                 if (string.IsNullOrEmpty(apiKey) || string.IsNullOrEmpty(endpoint) || string.IsNullOrEmpty(deployment))
                 {
-                    throw new Exception("Azure OpenAI yapılandırması eksik. Lütfen .env dosyasını kontrol edin.");
+                    throw new Exception("Azure OpenAI yapılandırması eksik. .env dosyasında AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT ve AZURE_OPENAI_DEPLOYMENT tanımlı olmalı.");
                 }
 
-                var url = $"{endpoint.TrimEnd('/')}/openai/deployments/{deployment}/chat/completions?api-version=2024-02-15-preview";
+                var url = $"{endpoint.TrimEnd('/')}/openai/deployments/{deployment}/chat/completions?api-version={apiVersion}";
 
                 var requestBody = new
                 {
@@ -58,8 +60,8 @@ namespace Paytak.Services
                             content = request.Message
                         }
                     },
-                    max_tokens = request.MaxTokens ?? 1000,
-                    temperature = request.Temperature ?? 0.7,
+                    max_completion_tokens = request.MaxTokens ?? 1000,
+                    temperature = 1,  // Bu model sadece varsayılan (1) değeri destekliyor
                     top_p = 0.95,
                     frequency_penalty = 0,
                     presence_penalty = 0
