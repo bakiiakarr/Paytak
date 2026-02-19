@@ -59,6 +59,9 @@ builder.Services.Configure<IdentityOptions>(options =>
 // Add OpenAI Service
 builder.Services.AddScoped<IOpenAIService, OpenAIService>();
 
+// Mevzuat servisi (Word dokümanlarını okur)
+builder.Services.AddSingleton<IMevzuatService, MevzuatService>();
+
 // Add HttpClient
 builder.Services.AddHttpClient();
 

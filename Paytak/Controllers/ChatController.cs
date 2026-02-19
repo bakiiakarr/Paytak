@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Paytak.Models.DTOs;
+using Paytak.Services;
 using System.Text.Json;
 
 namespace Paytak.Controllers
@@ -10,11 +11,13 @@ namespace Paytak.Controllers
     {
         private readonly ILogger<ChatController> _logger;
         private readonly HttpClient _httpClient;
+        private readonly IMevzuatService _mevzuatService;
 
-        public ChatController(ILogger<ChatController> logger, HttpClient httpClient)
+        public ChatController(ILogger<ChatController> logger, HttpClient httpClient, IMevzuatService mevzuatService)
         {
             _logger = logger;
             _httpClient = httpClient;
+            _mevzuatService = mevzuatService;
         }
 
         [HttpPost("send")]
@@ -23,6 +26,9 @@ namespace Paytak.Controllers
             try
             {
                 _logger.LogInformation("Chat message received: {Message}", request.Message);
+
+                // Kullanıcının sorusuna göre ilgili mevzuat metinlerini oku
+                var mevzuatText = await _mevzuatService.GetRelevantMevzuatAsync(request.Message);
 
                 // Azure OpenAI API configuration (.env: AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_DEPLOYMENT)
                 var apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY");
@@ -44,43 +50,59 @@ namespace Paytak.Controllers
                 }
 
                 // Prepare the request to Azure OpenAI
-                var openAiRequest = new
+                var messages = new List<object>
                 {
-                    messages = new[]
+                    new
                     {
-                        new
-                        {
-                            role = "system",
-                            content = @"Sen Paitak, akıllı belediye asistanısın. Türkçe konuşuyorsun ve belediye hizmetleri konusunda uzmanlaşmışsın. 
+                        role = "system",
+                        content = @"Sen Paitak, akıllı belediye asistanısın. Türkçe konuşuyorsun ve belediye hizmetleri ile belediye mevzuatı konusunda uzmanlaşmışsın. 
                             
                             ÖNEMLİ KURALLAR:
+                            - Cevaplarını mümkün olduğunca sisteminde kayıtlı belediye mevzuat dokümanları (Mevzuat1–Mevzuat6) çerçevesinde ver
+                            - Bir konuda mevzuatta açık bir hüküm yoksa bunu dürüstçe belirt ve kendi başına yeni bir kural uydurma
+                            - Mevzuata dayalı cevap verirken mümkünse ilgili mevzuatın adını ve madde numarasını belirt, emin değilsen uydurma
                             - Kendini sadece ilk tanışmada veya kullanıcı özellikle sorduğunda tanıt
                             - Kendini tanıtırken sadece 'Ben Paitak' de, 'Ben Sen Paitak' deme
                             - Her mesajda kendini tanıtma, bu gereksiz tekrar yaratır
                             - Doğal ve samimi bir şekilde sohbet et, sürekli kendini hatırlatma
                             
                             Ana Görevlerin:
-                            - Vatandaşların belediye hizmetleri hakkındaki sorularını yanıtlamak
-                            - Belediye süreçleri hakkında bilgi vermek
-                            - Şikayet ve talep yönetimi konularında yardım etmek
-                            - Belediye hizmetlerinin nasıl kullanılacağını açıklamak
+                            - Vatandaşların belediye hizmetleri ve ilgili mevzuat hakkındaki sorularını yanıtlamak
+                            - Belediye süreçleri ve bu süreçlerin dayandığı mevzuat hakkında bilgi vermek
+                            - Şikayet ve talep yönetimi konularında, ilgili mevzuat çerçevesinde yardım etmek
+                            - Belediye hizmetlerinin nasıl kullanılacağını ve hangi mevzuata dayandığını açıklamak
                             - Genel belediye bilgilerini paylaşmak
                             
                             Günlük Sohbet:
                             - Belediye konuları dışında da doğal ve samimi bir şekilde sohbet edebilirsin
                             - Günlük konuşmalarda, selamlaşma, hava durumu, genel konular hakkında da yanıt verebilirsin
-                            - Kullanıcı belediye konuları dışında bir şey sorarsa, önce doğal bir şekilde yanıtla, sonra belediye hizmetlerine yönlendirebilirsin
+                            - Kullanıcı belediye konuları dışında bir şey sorarsa, önce doğal bir şekilde yanıtla, sonra uygun ise belediye hizmetlerine veya mevzuata yönlendirebilirsin
                             - Her zaman nazik, yardımsever ve samimi ol
                             
-                            Yanıtların kısa, net ve yardımcı olmalı. Türkçe karakterleri doğru kullan. Sadece gerektiğinde kendini tanıt."
-                        },
-                        new
-                        {
-                            role = "user",
-                            content = request.Message
-                        }
-                    },
-                    max_completion_tokens = request.MaxTokens ?? 1000,
+                            Yanıtların kısa, net ve yardımcı olmalı. Türkçe karakterleri doğru kullan. Sadece gerektiğinde kendini tanıt. Mevzuata dayalı cevap verdiğini kullanıcıya açık ve anlaşılır şekilde ifade et."
+                    }
+                };
+
+                if (!string.IsNullOrWhiteSpace(mevzuatText))
+                {
+                    messages.Add(new
+                    {
+                        role = "system",
+                        content = "Aşağıda yerel dosyalardan okunmuş, kullanıcının sorusu ile en alakalı belediye mevzuatı bölümleri yer alıyor. Cevap verirken bu metni birincil kaynak olarak kullan:\n\n" + mevzuatText
+                    });
+                }
+
+                messages.Add(new
+                {
+                    role = "user",
+                    content = request.Message
+                });
+
+                // Bu deployment (gpt-5-mini) için desteklenen parametre: max_completion_tokens
+                var openAiRequest = new
+                {
+                    messages,
+                    max_completion_tokens = request.MaxTokens ?? 512,
                     temperature = 1  // Bu model sadece varsayılan (1) değeri destekliyor
                 };
 
@@ -107,15 +129,67 @@ namespace Paytak.Controllers
                         if (choices.GetArrayLength() > 0)
                         {
                             var firstChoice = choices[0];
+                            var finishReason = firstChoice.TryGetProperty("finish_reason", out var finishReasonProp)
+                                ? finishReasonProp.GetString()
+                                : null;
                             var message = firstChoice.GetProperty("message");
-                            var aiContent = message.GetProperty("content").GetString();
+
+                            string? aiContent = null;
+
+                            // Yeni API formatlarında content bazen dizi olabiliyor
+                            if (message.TryGetProperty("content", out var contentProp))
+                            {
+                                if (contentProp.ValueKind == JsonValueKind.String)
+                                {
+                                    aiContent = contentProp.GetString();
+                                }
+                                else if (contentProp.ValueKind == JsonValueKind.Array)
+                                {
+                                    // Parçaları birleştir
+                                    var parts = new List<string>();
+                                    foreach (var part in contentProp.EnumerateArray())
+                                    {
+                                        if (part.TryGetProperty("text", out var textProp) &&
+                                            textProp.TryGetProperty("value", out var valueProp) &&
+                                            valueProp.ValueKind == JsonValueKind.String)
+                                        {
+                                            parts.Add(valueProp.GetString() ?? string.Empty);
+                                        }
+                                    }
+
+                                    aiContent = string.Join("", parts);
+                                }
+                            }
                             
                             _logger.LogInformation("Manually parsed content: {Content}", aiContent);
+
+                            // Boş veya sadece whitespace ise anlamlı bir fallback mesajı dön
+                            if (string.IsNullOrWhiteSpace(aiContent))
+                            {
+                                var usageElement = document.RootElement.TryGetProperty("usage", out var usageProp)
+                                    ? usageProp
+                                    : default;
+
+                                var completionTokens = usageElement.ValueKind == JsonValueKind.Object &&
+                                                       usageElement.TryGetProperty("completion_tokens", out var compTokProp)
+                                    ? compTokProp.GetInt32()
+                                    : 0;
+
+                                var reasonText = !string.IsNullOrEmpty(finishReason)
+                                    ? $" (finish_reason: {finishReason}, completion_tokens: {completionTokens})"
+                                    : string.Empty;
+
+                                return Ok(new ChatResponseDto
+                                {
+                                    Success = true,
+                                    Response = "Üzgünüm, şu anda teknik bir sebeple yanıt üretemedim. Lütfen sorunuzu biraz daha kısa ve net yazarak tekrar dener misiniz?" + reasonText
+                                });
+                            }
                             
                             return Ok(new ChatResponseDto
                             {
                                 Success = true,
-                                Response = aiContent ?? "Üzgünüm, şu anda yanıt veremiyorum."
+                                Response = aiContent
                             });
                         }
                     }
